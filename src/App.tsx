@@ -1,4 +1,5 @@
 import MainLayout from './layouts/MainLayout';
+import { Toaster } from '@/components/ui/toaster';
 import { useAppDispatch } from './redux/hook';
 import { setLoading, setUser } from './redux/features/user/userSlice';
 import { useEffect } from 'react';
@@ -22,6 +23,7 @@ function App() {
   return (
     <div>
       <MainLayout />
+      <Toaster />
     </div>
   );
 }

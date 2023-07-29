@@ -1,3 +1,6 @@
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+
 export default function Navbar() {
   // const { user } = useAppSelector((state) => state.user);
   // const dispatch = useAppDispatch();
@@ -8,8 +11,11 @@ export default function Navbar() {
   //   });
   // };
   return (
-    <nav className="w-full h-16 fixed top backdrop-blur-lg z-10">
-      <div className="h-full w-full bg-white/60">this is nav</div>
+    <nav className="  flex justify-around top backdrop-blur-lg z-10">
+      <div className="h-full w-full">this is nav</div>
+      <Button asChild>
+        <Link to="/">Home</Link>
+      </Button>
     </nav>
   );
 }
