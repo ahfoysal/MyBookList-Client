@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
-import { loginUser } from '@/redux/features/user/userSlice';
+import { loginUser } from '@/redux/features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 

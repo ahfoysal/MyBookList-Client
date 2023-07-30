@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import { useSignupMutation } from '@/redux/features/user/userApi';
+import { useSignupMutation } from '@/redux/features/auth/authApi';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { toast } from 'react-toastify';
 
@@ -11,11 +11,6 @@ const SignupPage: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  type ILogin = {
-    userName: string;
-    email: string;
-    password: string;
-  };
 
   const [newUser, { data, error, isLoading, isError }] = useSignupMutation();
   if (isError) {
