@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { api } from './api/apiSlice';
 import userSlice from './features/user/userSlice';
+import { setupListeners } from '@reduxjs/toolkit/dist/query';
 
 const store = configureStore({
   reducer: {
@@ -17,3 +18,4 @@ export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 export default store;
+setupListeners(store.dispatch);

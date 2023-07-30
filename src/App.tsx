@@ -1,8 +1,6 @@
 import MainLayout from './layouts/MainLayout';
-import { Toaster } from '@/components/ui/toaster';
-import { useAppDispatch } from './redux/hook';
-import { setLoading, setUser } from './redux/features/user/userSlice';
-import { useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   // const dispatch = useAppDispatch();
@@ -23,7 +21,16 @@ function App() {
   return (
     <div>
       <MainLayout />
-      <Toaster />
+      <ToastContainer
+        limit={1}
+        autoClose={3000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        theme="dark"
+      />
     </div>
   );
 }

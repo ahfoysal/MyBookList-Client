@@ -1,13 +1,11 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import { ToastAction } from '@/components/ui/toast';
-import { useToast } from '@/components/ui/use-toast';
 import { useSignupMutation } from '@/redux/features/user/userApi';
+import { ReloadIcon } from '@radix-ui/react-icons';
+import { toast } from 'react-toastify';
 
 const SignupPage: React.FC = () => {
-  const { toast } = useToast();
-
   const {
     control,
     handleSubmit,
@@ -18,24 +16,24 @@ const SignupPage: React.FC = () => {
     email: string;
     password: string;
   };
-  const newUserMutation = useSignupMutation();
-  const [newUser] = newUserMutation;
-  const onSubmit = async (data) => {
-    try {
-      const result = await newUser(data);
-      console.log(result);
-      toast({
-        variant: 'default',
-        title: 'Signup Successful Please login.',
-        action: <ToastAction altText="Login">Login</ToastAction>,
-      });
-    } catch (error) {
-      console.log(error);
-      toast({
-        variant: 'destructive',
-        title: 'Something went wrong.',
-      });
-    }
+
+  const [newUser, { data, error, isLoading, isError }] = useSignupMutation();
+  if (isError) {
+    const customId = 'custom-id-yes';
+
+    toast.error((error as any)?.data.message, {
+      position: 'bottom-left',
+      toastId: customId,
+    });
+  }
+
+  const onSubmit = async (userData) => {
+    // try {
+    await newUser(userData);
+
+    console.log(error);
+
+    console.log(data);
   };
 
   return (
@@ -116,12 +114,26 @@ const SignupPage: React.FC = () => {
               )}
             />
           </div>
-          <button
+          {/* <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none"
           >
             Sign Up
-          </button>
+          </button> */}
+          <Button
+            disabled={isLoading}
+            className="w-full bg-blue-500  text-white"
+            type="submit"
+          >
+            {isLoading ? (
+              <>
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                Signing Up
+              </>
+            ) : (
+              <>Sign Up</>
+            )}
+          </Button>
         </form>
         <p className="mt-6">
           Already have an account?{' '}
