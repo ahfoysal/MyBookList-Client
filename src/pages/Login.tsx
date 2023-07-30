@@ -4,31 +4,44 @@ import { useLoginMutation } from '@/redux/features/auth/authApi';
 import { toast } from 'react-toastify';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { Button } from '@/components/ui/button';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '@/redux/hook';
+import { setUser } from '@/redux/features/auth/authSlice';
 
 const LoginPage: React.FC = () => {
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const [newUser, { data, error, isLoading, isError }] = useLoginMutation();
+  const [newUser, { data, error, isLoading, isError, isSuccess }] =
+    useLoginMutation();
   if (isError) {
-    const customId = 'custom-id-yes';
+    const errorId = 'error';
 
     toast.error((error as any)?.data.message, {
       position: 'bottom-left',
-      toastId: customId,
+      toastId: errorId,
+    });
+  }
+  const dispatch = useAppDispatch();
+
+  if (isSuccess) {
+    const successId = 'success';
+    console.log(data.data);
+    dispatch(setUser(data?.data?.user));
+    navigate('/');
+    toast.success(data.message, {
+      position: 'bottom-left',
+      toastId: successId,
     });
   }
 
   const onSubmit = async (userData) => {
     // try {
     await newUser(userData);
-
-    console.log(error);
-
-    console.log(data);
   };
 
   return (
@@ -89,24 +102,24 @@ const LoginPage: React.FC = () => {
 
           <Button
             disabled={isLoading}
-            className="w-full bg-blue-500  text-white"
+            className="w-full bg-blue-500 hover:bg-neutral-900  text-white"
             type="submit"
           >
             {isLoading ? (
               <>
                 <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                Signing Up
+                Logging Up
               </>
             ) : (
-              <>Sign Up</>
+              <>Login</>
             )}
           </Button>
         </form>
-        <p className="mt-6">
-          Already have an account?{' '}
-          <a href="#" className="text-blue-500 hover:text-blue-600">
-            Login
-          </a>
+        <p className="mt-6 text-center text-xs text-neutral-400">
+          Not registered?{' '}
+          <Link to={'/signup'} className="text-blue-500  hover:text-blue-600">
+            Create an account
+          </Link>
         </p>
       </div>
     </div>

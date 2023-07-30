@@ -4,6 +4,9 @@ import { Button } from '@/components/ui/button';
 import { useSignupMutation } from '@/redux/features/auth/authApi';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { toast } from 'react-toastify';
+import { Link, useNavigate } from 'react-router-dom';
+import { setUser } from '@/redux/features/auth/authSlice';
+import { useAppDispatch } from '@/redux/hook';
 
 const SignupPage: React.FC = () => {
   const {
@@ -12,13 +15,26 @@ const SignupPage: React.FC = () => {
     formState: { errors },
   } = useForm();
 
-  const [newUser, { data, error, isLoading, isError }] = useSignupMutation();
+  const [newUser, { data, error, isLoading, isSuccess, isError }] =
+    useSignupMutation();
   if (isError) {
     const customId = 'custom-id-yes';
 
     toast.error((error as any)?.data.message, {
       position: 'bottom-left',
       toastId: customId,
+    });
+  }
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  if (isSuccess) {
+    const successId = 'success';
+    console.log(data);
+    dispatch(setUser(data?.data?.user));
+    navigate('/');
+    toast.success(data.message, {
+      position: 'bottom-left',
+      toastId: successId,
     });
   }
 
@@ -117,7 +133,7 @@ const SignupPage: React.FC = () => {
           </button> */}
           <Button
             disabled={isLoading}
-            className="w-full bg-blue-500  text-white"
+            className="w-full bg-blue-500  hover:bg-neutral-900 text-white"
             type="submit"
           >
             {isLoading ? (
@@ -130,11 +146,11 @@ const SignupPage: React.FC = () => {
             )}
           </Button>
         </form>
-        <p className="mt-6">
+        <p className="mt-6 text-neutral-400 text-xs text-center">
           Already have an account?{' '}
-          <a href="#" className="text-blue-500 hover:text-blue-600">
+          <Link to={'/login'} className="text-blue-500 hover:text-blue-600">
             Login
-          </a>
+          </Link>
         </p>
       </div>
     </div>
