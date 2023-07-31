@@ -1,9 +1,5 @@
-'use client';
-
 import * as React from 'react';
-
 import { cn } from '@/lib/utils';
-// import { Icons } from '@/components/icons';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -15,59 +11,30 @@ import {
 } from '@/components/ui/navigation-menu';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Search } from 'lucide-react';
-
-const genres: { title: string; id: string }[] = [
-  {
-    title: 'Story',
-    id: '/docs/primitives/alert-dialog',
-  },
-  {
-    title: 'Short Story',
-    id: '/docs/primitives/hover-card',
-  },
-  {
-    title: 'Classic Story',
-    id: '/docs/primitives/hover-card',
-  },
-  {
-    title: 'Story',
-    id: '/docs/primitives/alert-dialog',
-  },
-  {
-    title: 'Short Story',
-    id: '/docs/primitives/hover-card',
-  },
-  {
-    title: 'Classic Story',
-    id: '/docs/primitives/hover-card',
-  },
-  {
-    title: 'Story',
-    id: '/docs/primitives/alert-dialog',
-  },
-  {
-    title: 'Short Story',
-    id: '/docs/primitives/hover-card',
-  },
-  {
-    title: 'Classic Story',
-    id: '/docs/primitives/hover-card',
-  },
-  {
-    title: 'Story',
-    id: '/docs/primitives/alert-dialog',
-  },
-  {
-    title: 'Short Story',
-    id: '/docs/primitives/hover-card',
-  },
-  {
-    title: 'Classic Story',
-    id: '/docs/primitives/hover-card',
-  },
-];
+import { useAppDispatch } from '@/redux/hook';
+import { setSearchResult, setTerm } from '@/redux/features/search/searchSlice';
+import { useSearchQuery } from '@/redux/features/search/searchApi';
 
 export function NavigationBrowse() {
+  const dispatch = useAppDispatch();
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [skip, setSkip] = React.useState(true);
+  const { data, isLoading, error, isSuccess, isError } = useSearchQuery(
+    searchTerm,
+    {
+      skip,
+    }
+  );
+  if (isSuccess) {
+    dispatch(setSearchResult(data.data));
+  }
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+    setSkip(false);
+    console.log(value);
+    dispatch(setTerm(value)); // If value is empty, set it to null
+  };
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -78,6 +45,8 @@ export function NavigationBrowse() {
               <Search size="20px" />
               <input
                 type="text"
+                value={searchTerm}
+                onChange={handleInputChange}
                 className="border-none w-full  bg-transparent hover:bg-none focus:outline-none"
               />
             </div>
@@ -173,3 +142,54 @@ const ListItem = React.forwardRef<
   );
 });
 ListItem.displayName = 'ListItem';
+
+const genres: { title: string; id: string }[] = [
+  {
+    title: 'Story',
+    id: '/docs/primitives/alert-dialog',
+  },
+  {
+    title: 'Short Story',
+    id: '/docs/primitives/hover-card',
+  },
+  {
+    title: 'Classic Story',
+    id: '/docs/primitives/hover-card',
+  },
+  {
+    title: 'Story',
+    id: '/docs/primitives/alert-dialog',
+  },
+  {
+    title: 'Short Story',
+    id: '/docs/primitives/hover-card',
+  },
+  {
+    title: 'Classic Story',
+    id: '/docs/primitives/hover-card',
+  },
+  {
+    title: 'Story',
+    id: '/docs/primitives/alert-dialog',
+  },
+  {
+    title: 'Short Story',
+    id: '/docs/primitives/hover-card',
+  },
+  {
+    title: 'Classic Story',
+    id: '/docs/primitives/hover-card',
+  },
+  {
+    title: 'Story',
+    id: '/docs/primitives/alert-dialog',
+  },
+  {
+    title: 'Short Story',
+    id: '/docs/primitives/hover-card',
+  },
+  {
+    title: 'Classic Story',
+    id: '/docs/primitives/hover-card',
+  },
+];
