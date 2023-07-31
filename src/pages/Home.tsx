@@ -1,10 +1,12 @@
-import { NavigationMenuDemo } from '@/components/Navigation';
+import { NavigationBrowse } from '@/components/Navigation';
+import BookListGrid from '@/components/books/BookListGrid';
 
 export default function Home() {
   return (
     <div>
       <div className="">
-        <NavigationMenuDemo />
+        <NavigationBrowse />
+        <BookListGrid />
       </div>
     </div>
   );

@@ -13,63 +13,98 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
-import { Link } from 'react-router-dom';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Search } from 'lucide-react';
 
-const components: { title: string; href: string; description: string }[] = [
+const genres: { title: string; id: string }[] = [
   {
-    title: 'Alert Dialog',
-    href: '/docs/primitives/alert-dialog',
-    description:
-      'A modal dialog that interrupts the user with important content and expects a response.',
+    title: 'Story',
+    id: '/docs/primitives/alert-dialog',
   },
   {
-    title: 'Hover Card',
-    href: '/docs/primitives/hover-card',
-    description:
-      'For sighted users to preview content available behind a link.',
+    title: 'Short Story',
+    id: '/docs/primitives/hover-card',
   },
   {
-    title: 'Progress',
-    href: '/docs/primitives/progress',
-    description:
-      'Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.',
+    title: 'Classic Story',
+    id: '/docs/primitives/hover-card',
   },
   {
-    title: 'Scroll-area',
-    href: '/docs/primitives/scroll-area',
-    description: 'Visually or semantically separates content.',
+    title: 'Story',
+    id: '/docs/primitives/alert-dialog',
   },
   {
-    title: 'Tabs',
-    href: '/docs/primitives/tabs',
-    description:
-      'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
+    title: 'Short Story',
+    id: '/docs/primitives/hover-card',
   },
   {
-    title: 'Tooltip',
-    href: '/docs/primitives/tooltip',
-    description:
-      'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
+    title: 'Classic Story',
+    id: '/docs/primitives/hover-card',
+  },
+  {
+    title: 'Story',
+    id: '/docs/primitives/alert-dialog',
+  },
+  {
+    title: 'Short Story',
+    id: '/docs/primitives/hover-card',
+  },
+  {
+    title: 'Classic Story',
+    id: '/docs/primitives/hover-card',
+  },
+  {
+    title: 'Story',
+    id: '/docs/primitives/alert-dialog',
+  },
+  {
+    title: 'Short Story',
+    id: '/docs/primitives/hover-card',
+  },
+  {
+    title: 'Classic Story',
+    id: '/docs/primitives/hover-card',
   },
 ];
 
-export function NavigationMenuDemo() {
+export function NavigationBrowse() {
   return (
-    <NavigationMenu dir="ltr">
+    <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
+          <p className="mb-2.5 font-semibold text-white">Search</p>
           <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-            <Search />
-            {/* <input
-              type="text"
-              className="border-none bg-none hover:bg-none focus:outline-none"
-            /> */}
+            <div className="flex  gap-2  items-center justify-center">
+              <Search size="20px" />
+              <input
+                type="text"
+                className="border-none w-full  bg-transparent hover:bg-none focus:outline-none"
+              />
+            </div>
           </NavigationMenuLink>
         </NavigationMenuItem>
+        <NavigationMenuItem className="relative">
+          <p className="mb-2.5 font-semibold text-white">Genres</p>
 
+          <NavigationMenuTrigger>Any</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ScrollArea className="h-[200px]   rounded-md border p-4">
+              <ul className="grid w-72 gap-3 py-2 grid-cols-2 ">
+                {genres.map((genre) => (
+                  <ListItem
+                    key={genre.title}
+                    title={genre.title}
+                    href={genre.id}
+                  ></ListItem>
+                ))}
+              </ul>
+            </ScrollArea>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
+          <p className="mb-2.5 font-semibold text-white">Authors</p>
+
+          <NavigationMenuTrigger>Any</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
               <li className="row-span-3">
@@ -101,28 +136,12 @@ export function NavigationMenuDemo() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
+
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Components</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-              {components.map((component) => (
-                <ListItem
-                  key={component.title}
-                  title={component.title}
-                  href={component.href}
-                >
-                  {component.description}
-                </ListItem>
-              ))}
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <Link to="/docs">
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Documentation
-            </NavigationMenuLink>
-          </Link>
+          <p className="mb-2.5 font-semibold text-white">Year</p>
+
+          <NavigationMenuTrigger disabled>Any</NavigationMenuTrigger>
+          <NavigationMenuContent></NavigationMenuContent>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
@@ -139,7 +158,7 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
+            'block select-none space-y-1 rounded-md p-1 pt-1.5 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
             className
           )}
           {...props}
