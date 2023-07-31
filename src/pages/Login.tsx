@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '@/redux/hook';
 import { setUser } from '@/redux/features/auth/authSlice';
+import Cookies from 'js-cookie';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -32,6 +33,8 @@ const LoginPage: React.FC = () => {
     const successId = 'success';
     console.log(data.data);
     dispatch(setUser(data?.data?.user));
+    Cookies.set('accessToken', data?.data.accessToken, { expires: 7 });
+
     navigate('/');
     toast.success(data.message, {
       position: 'bottom-left',

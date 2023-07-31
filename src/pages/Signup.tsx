@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import { setUser } from '@/redux/features/auth/authSlice';
 import { useAppDispatch } from '@/redux/hook';
+import Cookies from 'js-cookie';
 
 const SignupPage: React.FC = () => {
   const {
@@ -31,6 +32,7 @@ const SignupPage: React.FC = () => {
     const successId = 'success';
     console.log(data);
     dispatch(setUser(data?.data?.user));
+    Cookies.set('accessToken', data?.data.accessToken, { expires: 7 });
     navigate('/');
     toast.success(data.message, {
       position: 'bottom-left',
