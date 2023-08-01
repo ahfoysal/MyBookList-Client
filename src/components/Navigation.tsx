@@ -32,7 +32,7 @@ export function NavigationBrowse() {
     const value = event.target.value;
     setSearchTerm(value);
     setSkip(false);
-    console.log(value);
+
     dispatch(setTerm(value)); // If value is empty, set it to null
   };
   return (
@@ -52,7 +52,7 @@ export function NavigationBrowse() {
             </div>
           </NavigationMenuLink>
         </NavigationMenuItem>
-        <NavigationMenuItem className="relative">
+        {/* <NavigationMenuItem className="relative">
           <p className="mb-2.5 font-semibold text-white">Genres</p>
 
           <NavigationMenuTrigger>Any</NavigationMenuTrigger>
@@ -69,7 +69,7 @@ export function NavigationBrowse() {
               </ul>
             </ScrollArea>
           </NavigationMenuContent>
-        </NavigationMenuItem>
+        </NavigationMenuItem> */}
         <NavigationMenuItem>
           <p className="mb-2.5 font-semibold text-white">Authors</p>
 
@@ -106,7 +106,7 @@ export function NavigationBrowse() {
           </NavigationMenuContent>
         </NavigationMenuItem>
 
-        <NavigationMenuItem>
+        <NavigationMenuItem className="hidden md:block">
           <p className="mb-2.5 font-semibold text-white">Year</p>
 
           <NavigationMenuTrigger disabled>Any</NavigationMenuTrigger>

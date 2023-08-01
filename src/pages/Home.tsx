@@ -10,8 +10,8 @@ export default function Home() {
     <div>
       <div className="">
         <NavigationBrowse />
-        {results && <SearchResult items={results} />}
-        <BookListGrid />
+        {results && results?.length > 0 && <SearchResult items={results} />}
+        {/* <BookListGrid />   */}
       </div>
     </div>
   );
