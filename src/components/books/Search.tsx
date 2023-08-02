@@ -24,9 +24,7 @@ const SearchResult: FC<IProps> = ({ items }) => {
       skip,
     }
   );
-  if (isSuccess) {
-    console.log(data);
-  }
+
   return (
     <div className="py-8">
       <div className="grid grid-cols-2 lg:grid-cols-6 md:grid-cols-5  gap-3 sm:grid-cols-4">
@@ -39,10 +37,10 @@ const SearchResult: FC<IProps> = ({ items }) => {
                 setName(item.name);
               }}
               key={index}
-              openDelay={1500}
-              closeDelay={100}
+              openDelay={500}
+              closeDelay={0}
             >
-              <HoverCardTrigger className="rounded-sm h-[250px] relative overflow-hidden   flex flex-col justify-center ">
+              <HoverCardTrigger className="rounded-sm h-[250px] max-w-fit relative overflow-hidden   flex flex-col justify-center ">
                 <div className=" h-[200px] w-[150px] mx-auto  overflow-hidden flex items-center justify-center rounded-sm">
                   <img
                     src={item.img}
@@ -53,7 +51,7 @@ const SearchResult: FC<IProps> = ({ items }) => {
                   {item.name}
                 </p>
               </HoverCardTrigger>
-              <HoverContent isSuccess={isSuccess} book={data} />
+              <HoverContent isSuccess={isSuccess} book={data?.data} id={id} />
             </HoverCard>
           );
         })}
