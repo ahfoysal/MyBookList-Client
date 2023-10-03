@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { cn } from '@/lib/utils';
+import { tv } from 'tailwind-variants';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -9,187 +8,401 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Search } from 'lucide-react';
-import { useAppDispatch } from '@/redux/hook';
-import { setSearchResult, setTerm } from '@/redux/features/search/searchSlice';
-import { useSearchQuery } from '@/redux/features/search/searchApi';
+import { Spinner } from '@nextui-org/spinner';
+import { Tooltip } from '@nextui-org/tooltip';
+import { Button } from '@nextui-org/button';
+
+import { useHover } from '@react-aria/interactions';
+import { usepewdsflixSettings } from '@/hooks/useLocalStorage';
+import { NavLink } from 'react-router-dom';
+import Menu from '@/assets/icons/MenuIcon';
+import Home from '@/assets/icons/HomeIcon';
+import Search from '@/assets/icons/SearchIcon';
+import Discover from '@/assets/icons/DiscoverIcon';
+import TrendingUp from '@/assets/icons/TrendingUpIcon';
 
 export function NavigationBrowse() {
-  const dispatch = useAppDispatch();
-  const [searchTerm, setSearchTerm] = React.useState('');
-  const [skip, setSkip] = React.useState(true);
-  const { data, isLoading, error, isSuccess, isError } = useSearchQuery(
-    searchTerm,
-    {
-      skip,
-    }
-  );
-  if (isSuccess) {
-    dispatch(setSearchResult(data.data));
-  }
-  const handleInputChange = (event) => {
-    const value = event.target.value;
-    setSearchTerm(value);
-    setSkip(false);
+  // const dispatch = useAppDispatch();
+  // const [searchTerm, setSearchTerm] = React.useState('');
+  // const [skip, setSkip] = React.useState(true);
+  // const { data, isLoading, error, isSuccess, isError } = useSearchQuery(
+  //   searchTerm,
+  //   {
+  //     skip,
+  //   }
+  // );
+  // if (isSuccess) {
+  //   dispatch(setSearchResult(data.data));
+  // }
 
-    dispatch(setTerm(value)); // If value is empty, set it to null
-  };
+  const { sidebarMiniMode, sidebarHoverMode, sidebarBoxedMode } =
+    usepewdsflixSettings();
+  const { hoverProps: sidebarHoverProps, isHovered } = useHover({
+    isDisabled: !sidebarHoverMode.value,
+  });
+  const navigationItemWidthStyle =
+    sidebarMiniMode.value && !isHovered ? 'w-[56px]' : 'w-[215px]';
+
   return (
-    <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <p className="mb-2.5 font-semibold text-white">Search</p>
-          <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-            <div className="flex  gap-2  items-center justify-center">
-              <Search size="20px" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={handleInputChange}
-                className="border-none w-full  bg-transparent hover:bg-none focus:outline-none"
-              />
-            </div>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        {/* <NavigationMenuItem className="relative">
-          <p className="mb-2.5 font-semibold text-white">Genres</p>
+    <aside
+      {...sidebarHoverProps}
+      className={sidebarStyles({
+        sidebarMiniMode: sidebarMiniMode.value,
+        sidebarBoxedMode: sidebarBoxedMode.value,
+        sidebarHoverMode: isHovered,
+      })}
+    >
+      <div className="mb-3 ml-4 flex h-[65px] w-full flex-row items-center justify-start">
+        <Button
+          className={`${
+            sidebarMiniMode.value && !isHovered
+              ? 'basis-[50px]'
+              : 'basis-[60px]'
+          } flex shrink-0 grow-0 justify-center`}
+          isIconOnly
+          variant="light"
+          onPress={() => {
+            sidebarMiniMode.set(!sidebarMiniMode.value);
+          }}
+        >
+          <Menu />
+        </Button>
+        {sidebarMiniMode.value && !isHovered ? null : (
+          <div className="flex items-center gap-x-3">
+            <NavLink
+              to="/"
+              arial-label="home-page"
+              className="bg-gradient-to-tr from-secondary to-primary to-50% bg-clip-text text-lg font-medium tracking-normal text-white focus:outline-none focus:ring-2 focus:ring-focus md:text-2xl"
+            >
+              Menu
+            </NavLink>
+          </div>
+        )}
+      </div>
+      <NavigationMenu
+        orientation="vertical"
+        // viewportPositionClassName
+        viewportPositionClassName={viewportPositionStyles({
+          sidebarMiniMode: sidebarMiniMode.value,
+          sidebarHoverMode: sidebarHoverMode.value,
+          sidebarBoxedMode: sidebarBoxedMode.value,
+        })}
+      >
+        <NavigationMenuList className="m-0 gap-3 [&_.active]:bg-default [&_.active]:text-default-foreground">
+          <NavigationMenuItem
+            className={`${navigationItemWidthStyle} text-left transition-[width] duration-200`}
+            value="home"
+          >
+            <Tooltip
+              isDisabled={
+                !sidebarMiniMode.value || (sidebarHoverMode && isHovered)
+              }
+              placement="right"
+              offset={10}
+              showArrow
+            >
+              <NavigationMenuLink asChild>
+                <NavLink
+                  to="/"
+                  className={navigationMenuTriggerStyle({
+                    class: `${navigationItemWidthStyle} h-[56px] justify-start transition-[width] duration-200`,
+                  })}
+                >
+                  {({ isActive, isPending }) => (
+                    <>
+                      <Home
+                        className={
+                          !sidebarMiniMode.value ||
+                          (sidebarHoverMode && isHovered)
+                            ? 'mr-4'
+                            : ''
+                        }
+                        filled={isActive}
+                      />
+                      {!sidebarMiniMode.value || (sidebarHoverMode && isHovered)
+                        ? 'Home'
+                        : null}
+                      <Spinner
+                        size="sm"
+                        classNames={{
+                          base:
+                            isPending &&
+                            (!sidebarMiniMode.value ||
+                              (sidebarHoverMode && isHovered))
+                              ? 'ml-auto'
+                              : '!hidden',
+                          circle1: 'border-b-default-foreground',
+                          circle2: 'border-b-default-foreground',
+                        }}
+                      />
+                    </>
+                  )}
+                </NavLink>
+              </NavigationMenuLink>
+            </Tooltip>
+          </NavigationMenuItem>
 
-          <NavigationMenuTrigger>Any</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ScrollArea className="h-[200px]   rounded-md border p-4">
-              <ul className="grid w-72 gap-3 py-2 grid-cols-2 ">
-                {genres.map((genre) => (
-                  <ListItem
-                    key={genre.title}
-                    title={genre.title}
-                    href={genre.id}
-                  ></ListItem>
-                ))}
-              </ul>
-            </ScrollArea>
-          </NavigationMenuContent>
-        </NavigationMenuItem> */}
-        <NavigationMenuItem>
-          <p className="mb-2.5 font-semibold text-white">Authors</p>
-
-          <NavigationMenuTrigger>Any</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
-                <NavigationMenuLink asChild>
-                  <a
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                    href="/"
-                  >
-                    {/* <Icons.logo className="h-6 w-6" /> */}
-                    <div className="mb-2 mt-4 text-lg font-medium">
-                      shadcn/ui
-                    </div>
-                    <p className="text-sm leading-tight text-muted-foreground">
-                      Beautifully designed components built with Radix UI and
-                      Tailwind CSS.
-                    </p>
-                  </a>
-                </NavigationMenuLink>
-              </li>
-              <ListItem href="/docs" title="Introduction">
-                Re-usable components built using Radix UI and Tailwind CSS.
-              </ListItem>
-              <ListItem href="/docs/installation" title="Installation">
-                How to install dependencies and structure your app.
-              </ListItem>
-              <ListItem href="/docs/primitives/typography" title="Typography">
-                Styles for headings, paragraphs, lists...etc
-              </ListItem>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem className="hidden md:block">
-          <p className="mb-2.5 font-semibold text-white">Year</p>
-
-          <NavigationMenuTrigger disabled>Any</NavigationMenuTrigger>
-          <NavigationMenuContent></NavigationMenuContent>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
+          <NavigationMenuItem
+            className={`${navigationItemWidthStyle} text-left transition-[width] duration-200`}
+            value="trending"
+          >
+            <Tooltip
+              content={'trending'}
+              isDisabled={
+                !sidebarMiniMode.value || (sidebarHoverMode && isHovered)
+              }
+              placement="right"
+              showArrow
+              offset={10}
+            >
+              <NavigationMenuLink asChild>
+                <NavLink
+                  to="/trending/"
+                  className={navigationMenuTriggerStyle({
+                    class: `${navigationItemWidthStyle} h-[56px] justify-start transition-[width] duration-200`,
+                  })}
+                >
+                  {({ isActive, isPending }) => (
+                    <>
+                      <TrendingUp
+                        className={
+                          !sidebarMiniMode.value ||
+                          (sidebarHoverMode && isHovered)
+                            ? 'mr-4'
+                            : ''
+                        }
+                        filled={isActive}
+                      />
+                      {!sidebarMiniMode.value || (sidebarHoverMode && isHovered)
+                        ? 'Trending'
+                        : null}
+                      <Spinner
+                        size="sm"
+                        classNames={{
+                          base:
+                            isPending &&
+                            (!sidebarMiniMode.value ||
+                              (sidebarHoverMode && isHovered))
+                              ? 'ml-auto'
+                              : '!hidden',
+                          circle1: 'border-b-default-foreground',
+                          circle2: 'border-b-default-foreground',
+                        }}
+                      />
+                    </>
+                  )}
+                </NavLink>
+              </NavigationMenuLink>
+            </Tooltip>
+          </NavigationMenuItem>
+          <NavigationMenuItem
+            className={`${navigationItemWidthStyle} text-left transition-[width] duration-200`}
+            value="Sports"
+          >
+            <Tooltip
+              content={'Sports'}
+              isDisabled={
+                !sidebarMiniMode.value || (sidebarHoverMode && isHovered)
+              }
+              placement="right"
+              showArrow
+              offset={10}
+            >
+              <NavigationMenuLink asChild>
+                <NavLink
+                  to="/sports"
+                  className={navigationMenuTriggerStyle({
+                    class: `${navigationItemWidthStyle} h-[56px] justify-start transition-[width] duration-200`,
+                  })}
+                >
+                  {({ isActive, isPending }) => (
+                    <>
+                      <Discover
+                        className={
+                          !sidebarMiniMode.value ||
+                          (sidebarHoverMode && isHovered)
+                            ? 'mr-4'
+                            : ''
+                        }
+                        filled={isActive}
+                      />
+                      {!sidebarMiniMode.value || (sidebarHoverMode && isHovered)
+                        ? 'Sports'
+                        : null}
+                      <Spinner
+                        size="sm"
+                        classNames={{
+                          base:
+                            isPending &&
+                            (!sidebarMiniMode.value ||
+                              (sidebarHoverMode && isHovered))
+                              ? 'ml-auto'
+                              : '!hidden',
+                          circle1: 'border-b-default-foreground',
+                          circle2: 'border-b-default-foreground',
+                        }}
+                      />
+                    </>
+                  )}
+                </NavLink>
+              </NavigationMenuLink>
+            </Tooltip>
+          </NavigationMenuItem>
+          <NavigationMenuItem
+            className={`${navigationItemWidthStyle} text-left transition-[width] duration-200`}
+            value="discover"
+          >
+            <Tooltip
+              content={'Search'}
+              isDisabled={
+                !sidebarMiniMode.value || (sidebarHoverMode && isHovered)
+              }
+              placement="right"
+              showArrow
+              offset={10}
+            >
+              <NavigationMenuLink asChild>
+                <NavLink
+                  to="/search"
+                  className={navigationMenuTriggerStyle({
+                    class: `${navigationItemWidthStyle} h-[56px] justify-start transition-[width] duration-200`,
+                  })}
+                >
+                  {({ isActive, isPending }) => (
+                    <>
+                      <Search
+                        className={
+                          !sidebarMiniMode.value ||
+                          (sidebarHoverMode && isHovered)
+                            ? 'mr-4'
+                            : ''
+                        }
+                        filled={isActive}
+                      />
+                      {!sidebarMiniMode.value || (sidebarHoverMode && isHovered)
+                        ? 'Search'
+                        : null}
+                      <Spinner
+                        size="sm"
+                        classNames={{
+                          base:
+                            isPending &&
+                            (!sidebarMiniMode.value ||
+                              (sidebarHoverMode && isHovered))
+                              ? 'ml-auto'
+                              : '!hidden',
+                          circle1: 'border-b-default-foreground',
+                          circle2: 'border-b-default-foreground',
+                        }}
+                      />
+                    </>
+                  )}
+                </NavLink>
+              </NavigationMenuLink>
+            </Tooltip>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
+    </aside>
   );
 }
 
-const ListItem = React.forwardRef<
-  React.ElementRef<'a'>,
-  React.ComponentPropsWithoutRef<'a'>
->(({ className, title, children, ...props }, ref) => {
-  return (
-    <li>
-      <NavigationMenuLink asChild>
-        <a
-          ref={ref}
-          className={cn(
-            'block select-none space-y-1 rounded-md p-1 pt-1.5 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
-            className
-          )}
-          {...props}
-        >
-          <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {children}
-          </p>
-        </a>
-      </NavigationMenuLink>
-    </li>
-  );
+const sidebarStyles = tv({
+  base: 'fixed z-[1999] box-border hidden shrink-0 grow-0 transition-[max-width] duration-400 sm:block',
+  variants: {
+    sidebarMiniMode: {
+      true: 'w-full max-w-[80px] basis-[80px]',
+      false: 'w-full max-w-[250px] basis-[250px]',
+    },
+    sidebarBoxedMode: {
+      true: 'left-[15px] top-[15px] h-[calc(100vh_-_30px)] rounded-large border border-divider backdrop-blur-lg shadow-medium',
+      false: 'left-0 top-0 h-screen',
+    },
+    sidebarHoverMode: {
+      true: 'w-full max-w-[250px] basis-[250px] rounded-r-large border border-divider backdrop-blur-lg shadow-2xl',
+    },
+  },
+  compoundVariants: [{}],
+  defaultVariants: {
+    sidebarMiniMode: false,
+    sidebarBoxedMode: false,
+  },
 });
-ListItem.displayName = 'ListItem';
 
-const genres: { title: string; id: string }[] = [
-  {
-    title: 'Story',
-    id: '/docs/primitives/alert-dialog',
+const sidebarActiveStyles = tv({
+  base: 'h-[56px] justify-start transition-[width] duration-400',
+  variants: {
+    sidebarMiniMode: {
+      true: 'w-[56px]',
+      false: 'w-[215px]',
+    },
+    sidebarHoverMode: {
+      true: 'w-[215px]',
+    },
+    sidebarRoundedAll: {
+      true: 'rounded-small',
+      false: 'rounded-r-small',
+    },
+    sidebarPillAll: {
+      true: 'rounded-[56px]',
+      false: 'rounded-r-[56px]',
+    },
   },
-  {
-    title: 'Short Story',
-    id: '/docs/primitives/hover-card',
+  defaultVariants: {
+    sidebarMiniMode: false,
+    sidebarRoundedAll: true,
   },
-  {
-    title: 'Classic Story',
-    id: '/docs/primitives/hover-card',
+});
+
+const viewportPositionStyles = tv({
+  base: '!fixed',
+  variants: {
+    sidebarMiniMode: {
+      true: '!left-[85px]',
+    },
+    sidebarHoverMode: {
+      true: '!left-[250px]',
+    },
+    sidebarBoxedMode: {
+      true: '!left-[265px]',
+    },
   },
-  {
-    title: 'Story',
-    id: '/docs/primitives/alert-dialog',
+  compoundVariants: [
+    {
+      sidebarMiniMode: true,
+      sidebarHoverMode: true,
+      sidebarBoxedMode: false,
+      class: '!left-[250px]',
+    },
+    {
+      sidebarMiniMode: true,
+      sidebarHoverMode: false,
+      sidebarBoxedMode: true,
+      class: '!left-[100px]',
+    },
+    {
+      sidebarMiniMode: false,
+      sidebarHoverMode: false,
+      sidebarBoxedMode: false,
+      class: '!left-[250px]',
+    },
+  ],
+  defaultVariants: {
+    sidebarMiniMode: false,
+    sidebarHoverMode: false,
+    sidebarBoxedMode: false,
   },
-  {
-    title: 'Short Story',
-    id: '/docs/primitives/hover-card',
+});
+
+const navigationPartStyles = tv({
+  base: 'w-full overflow-x-visible overflow-y-scroll scrollbar-hide',
+  variants: {
+    sidebarBoxedMode: {
+      true: 'h-[calc(100%_-_100px)]',
+      false: 'h-[calc(100%_-_80px)]',
+    },
   },
-  {
-    title: 'Classic Story',
-    id: '/docs/primitives/hover-card',
+  defaultVariants: {
+    sidebarBoxedMode: false,
   },
-  {
-    title: 'Story',
-    id: '/docs/primitives/alert-dialog',
-  },
-  {
-    title: 'Short Story',
-    id: '/docs/primitives/hover-card',
-  },
-  {
-    title: 'Classic Story',
-    id: '/docs/primitives/hover-card',
-  },
-  {
-    title: 'Story',
-    id: '/docs/primitives/alert-dialog',
-  },
-  {
-    title: 'Short Story',
-    id: '/docs/primitives/hover-card',
-  },
-  {
-    title: 'Classic Story',
-    id: '/docs/primitives/hover-card',
-  },
-];
+});

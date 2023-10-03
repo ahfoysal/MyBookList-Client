@@ -1,5 +1,4 @@
 import { api } from '@/redux/api/apiSlice';
-import { url } from 'inspector';
 
 const searchApi = api.injectEndpoints({
   endpoints: (builder) => ({
