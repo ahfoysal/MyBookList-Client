@@ -1,17 +1,22 @@
-import { NavigationBrowse } from '@/components/Navigation';
-import BookListGrid from '@/components/books/BookListGrid';
-import SearchResult from '@/components/books/Search';
-import { useAppSelector } from '@/redux/hook';
+import RightSideNav from '@/components/Shared/RightSideNav';
+import BreakingNews from '@/components/home/BreakingNews';
+import FeaturedNews from '@/components/home/FeaturedNews';
+// import { usepewdsflixSettings } from '@/hooks/useLocalStorage';
 
 export default function Home() {
-  const { results } = useAppSelector((state) => state.search);
+  // const { sidebarMiniMode, sidebarBoxedMode, sidebarHoverMode } =
+  //   usepewdsflixSettings();
 
   return (
-    <div>
-      <div className="">
-        <NavigationBrowse />
-        {results && results?.length > 0 && <SearchResult items={results} />}
-        {/* <BookListGrid />   */}
+    <div className="container mx-auto">
+      <BreakingNews />
+      <div className="grid md:grid-cols-4 grid-cols-1 gap-6">
+        <div className="col-span-3">
+          <div className="div">
+            <FeaturedNews />
+          </div>
+        </div>
+        <RightSideNav />
       </div>
     </div>
   );

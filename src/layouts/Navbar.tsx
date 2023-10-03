@@ -1,4 +1,5 @@
-import { Button } from '@/components/ui/button';
+import { PopoverAuth } from '@/components/AuthPopover';
+import { Button } from '@nextui-org/button';
 import { Link } from 'react-router-dom';
 
 export default function Navbar() {
@@ -10,25 +11,39 @@ export default function Navbar() {
   //     //
   //   });
   // };
+  const currentDate: Date = new Date();
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: 'long',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  };
+
+  const formattedDate: string = new Intl.DateTimeFormat(
+    'en-US',
+    options
+  ).format(currentDate);
+
   return (
-    <nav className="top backdrop-blur-lg bg-[#152232] z-10">
-      <div className="max-w-7xl mx-auto h-full w-full flex justify-between px-24 py-4">
-        <div className="logo-container">
-          <Link to="/" className="logo text-2xl text-white font-extrabold">
-            My Book List
+    <nav className="container mx-auto items-center flex justify-between w-full top-0 backdrop-blur-lg  z-99 my-4 text-center">
+      <div></div>
+      <div className=" h-full w-full ">
+        <div className="logo-container flex  justify-center">
+          <Link
+            to="/"
+            className="h-[60px] logo text-2xl text-white font-extrabold"
+          >
+            <img
+              src="/Logo.png"
+              alt=""
+              className="w-full h-full object-cover"
+            />
           </Link>
         </div>
-        <div className="buttons flex gap-2">
-          <Button
-            className="w-full bg-transparent hover:bg-transparent  text-neutral-400"
-            asChild
-          >
-            <Link to="/login">Login</Link>
-          </Button>
-          <Button className="w-fit  flex-1 bg-blue-500 hover:shadow-blue-300 hover:shadow-2xl  text-white">
-            <Link to="/signup">SignUp</Link>
-          </Button>
-        </div>
+        <div className="mt-2">{formattedDate}</div>
+      </div>
+      <div>
+        <PopoverAuth />
       </div>
     </nav>
   );

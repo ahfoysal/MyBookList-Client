@@ -1,6 +1,5 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
 import { useSignupMutation } from '@/redux/features/auth/authApi';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { toast } from 'react-toastify';
@@ -8,8 +7,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { setUser } from '@/redux/features/auth/authSlice';
 import { useAppDispatch } from '@/redux/hook';
 import Cookies from 'js-cookie';
+import { Button } from '@nextui-org/button';
+import { Separator } from '@/components/ui/separator';
 
-const SignupPage: React.FC = () => {
+const SignupPage = ({ setIsLogin }) => {
   const {
     control,
     handleSubmit,
@@ -51,10 +52,11 @@ const SignupPage: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center ">
-      <div className="max-w-sm w-full bg-[#151F2E] rounded-lg p-8 py-12 shadow-md">
-        <h2 className="text-2xl font-semibold mb-10 text-center text-neutral-400">
+      <div className="max-w-sm w-full  rounded-lg  shadow-md">
+        <h2 className="text-2xl font-semibold mb-4 text-center text-neutral-400">
           Sign up
         </h2>
+        <Separator className="my-4" />
 
         <form onSubmit={handleSubmit(onSubmit)} className="text-center">
           <div className="mb-4">
@@ -69,7 +71,7 @@ const SignupPage: React.FC = () => {
                     {...field}
                     type="text"
                     placeholder="Username"
-                    className="w-full px-3 py-2 rounded-md  focus:outline-none focus:border-blue-500"
+                    className="w-full px-3 bg-[#27272A] py-2 rounded-md  focus:outline-none focus:border-blue-500"
                   />
                   {errors.username && (
                     <p className="text-left text-red-500 text-sm mt-2">
@@ -92,7 +94,7 @@ const SignupPage: React.FC = () => {
                     {...field}
                     type="email"
                     placeholder="Email"
-                    className="w-full px-3 py-2 bg-#151F2E rounded-md  focus:outline-none focus:border-blue-500"
+                    className="w-full px-3 py-2 bg-[#27272A] rounded-md  focus:outline-none focus:border-blue-500"
                   />
                   {errors.email && (
                     <p className="text-left text-red-500 text-sm mt-2">
@@ -116,7 +118,7 @@ const SignupPage: React.FC = () => {
                     {...field}
                     type="password"
                     placeholder="Password"
-                    className="w-full px-3 py-2 rounded-md  focus:outline-none focus:border-blue-500"
+                    className="w-full bg-[#27272A] px-3 py-2 rounded-md  focus:outline-none focus:border-blue-500"
                   />
                   {errors.password && (
                     <p className="text-left text-red-500 text-sm mt-2">
@@ -135,7 +137,7 @@ const SignupPage: React.FC = () => {
           </button> */}
           <Button
             disabled={isLoading}
-            className="w-full bg-blue-500  hover:bg-neutral-900 text-white"
+            className="w-full bg-blue-500 rounded-lg py-1 hover:bg-blue-600 text-white"
             type="submit"
           >
             {isLoading ? (
@@ -150,9 +152,12 @@ const SignupPage: React.FC = () => {
         </form>
         <p className="mt-6 text-neutral-400 text-xs text-center">
           Already have an account?{' '}
-          <Link to={'/login'} className="text-blue-500 hover:text-blue-600">
+          <span
+            onClick={() => setIsLogin(true)}
+            className="text-blue-500 hover:text-blue-600"
+          >
             Login
-          </Link>
+          </span>
         </p>
       </div>
     </div>
